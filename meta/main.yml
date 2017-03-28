@@ -2,19 +2,19 @@ dependencies:
   - ChristopherDavenport.universal-java
   - ChristopherDavenport.universal-tomcat
 
-  galaxy_info:
-    author: Christopher Davenport
-    description: Ellucian Tomcat Installer
-    company: Eckerd College
-    license: MIT
+galaxy_info:
+  author: Christopher Davenport
+  description: Ellucian Ellucian Solution Manager
+  company: Eckerd College
+  license: MIT
 
-    min_ansible_version: 2.1
+  min_ansible_version: 2.1
 
-    galaxy_tags:
-      - ellucian
-      - deployment
+  galaxy_tags:
+    - ellucian
+    - deployment
 
-    platforms:
-      - name: EL
-        versions:
-          - 7
+  platforms:
+    - name: EL
+      versions:
+        - 7
