@@ -1,6 +1,7 @@
 dependencies:
   - ChristopherDavenport.universal-java
   - ChristopherDavenport.universal-tomcat
+  - ChristopherDavenport.jenkins
 
 galaxy_info:
   author: Christopher Davenport
