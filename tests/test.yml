@@ -3,6 +3,18 @@
   vars:
     java_type: Open
     java_version: "8"
+
+    test_user: esmadmin
+
+    jenkins_port: "8081"
+    jenkins_user: "{{ test_user }}"
+
+    tomcat_user_name: "{{ test_user }}"
+    tomcat_user_group: "{{ test_user }}"
+    tomcat_users:
+      - name: "{{ test_user }}"
+        password: "{{ test_user }}"
+        roles: "manager-gui,admin-gui"
   pre_tasks:
     - name: Update apt cache.
       apt: update_cache=yes
@@ -10,3 +22,29 @@
       when: ansible_os_family == 'Debian'
   roles:
     - role_under_test
+  post_tasks:
+    - name: Wait For Service to Come Online
+      pause:
+        seconds: 30
+    - name: Get Default Password
+      command: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: __jenkins_defaultPassword
+      changed_when: false
+    - name: Debug Password
+      debug: var=__jenkins_defaultPassword
+    - name: Check Working URI
+      uri:
+        url: http://0.0.0.0:8081
+        force_basic_auth: yes
+        return_content: yes
+        status_code: 200
+        follow_redirects: all
+        user: admin
+        password: "{{ __jenkins_defaultPassword.stdout }}"
+    - name: Check Manager Application
+      uri:
+        url: http://0.0.0.0:8080/manager
+        return_content: yes
+        follow_redirects: all
+        user: "{{ test_user }}"
+        password: "{{ test_user }}"
