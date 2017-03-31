@@ -13,15 +13,6 @@
   roles:
     - role_under_test
   post_tasks:
-    - name: Wait For Service to Come Online
-      pause:
-        minutes: 2
-    - name: Output Tomcat Log File
-      command: cat {{ tomcat_catalina_home }}/logs/catalina.out
-      register: __ellucian_solution_manager_catalina_out
-      changed_when: False
-    - name: Debug Log File
-      debug: var=__ellucian_solution_manager_catalina_out.stdout_lines
     - name: Check Manager Application
       uri:
         url: http://0.0.0.0:8080/manager
@@ -29,12 +20,6 @@
         follow_redirects: all
         user: "{{ esm_user }}"
         password: "{{ esm_user }}"
-    - name: Get Default Password
-      command: cat /var/lib/jenkins/secrets/initialAdminPassword
-      register: __jenkins_defaultPassword
-      changed_when: false
-    - name: Debug Password
-      debug: var=__jenkins_defaultPassword
     - name: Check Working URI
       uri:
         url: http://0.0.0.0:8080/jenkins
@@ -44,3 +29,9 @@
         follow_redirects: all
         user: admin
         password: "{{ __jenkins_defaultPassword.stdout }}"
+    - name: Output Tomcat Log File
+      command: cat {{ tomcat_catalina_home }}/logs/catalina.out
+      register: __ellucian_solution_manager_catalina_out
+      changed_when: False
+    - name: Debug Log File
+      debug: var=__ellucian_solution_manager_catalina_out.stdout_lines

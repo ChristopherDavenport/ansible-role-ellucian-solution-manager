@@ -86,7 +86,7 @@
 - name: Create Configuration Database Encryption Key
   become: yes
   become_user: "{{ esm_user }}"
-  shell: java -classpath "{{ esm_deploy_directory }}/admin_utils.jar:{{ esm_deploy_directory }}/commons-codec-1.5.jar" adminutils.codec.AdminCodecUtils {{ esm_database_file_password }} {{ esm_database_user_password }} {{ esm_database_user_name }} {{ esm_data_directory }}
+  command: java -classpath "{{ esm_deploy_directory }}/adminutils.jar:{{ esm_deploy_directory }}/commons-codec-1.5.jar" adminutils.codec.AdminCodecUtils {{ esm_database_file_password }} {{ esm_database_user_password }} {{ esm_database_user_name }} {{ esm_data_directory }}
   args:
     chdir: "{{ esm_deploy_directory }}"
     creates: "{{ esm_grails_directory }}/admin-config.properties"
@@ -100,7 +100,7 @@
   copy:
     remote_src: yes
     dest: "{{ tomcat_catalina_home }}/webapps/jenkins.war"
-    src: "/usr/lib/jenkins/jenkins.war"
+    src: "{{ jenkins_jar_location }}"
     owner: "{{ esm_user }}"
     group: "{{ esm_group }}"
   notify: Restart Tomcat
@@ -113,3 +113,26 @@
     group: "{{ esm_group }}"
   when: esm_deploy_exists
   notify: Restart Tomcat
+
+###############################################################################
+# Configure Jenkins
+
+- name: Flush Handler To Configure Tomcat Apps
+  meta: flush_handlers
+
+- name: Wait For Jenkins Configuration to Complete
+  wait_for:
+    path: "{{ jenkins_initialAdminPassword_location }}"
+    timeout: 60
+
+- name: Capture Jenkins Initial Admin Password
+  command: cat {{ jenkins_initialAdminPassword_location }}
+  register: __jenkins_defaultPassword
+  changed_when: false
+
+# - name: Utilize Jenkins CLI
+#   command: java -jar {{ tomcat_catalina_home }}/webapps/jenkins/WEB-INF/jenkins-cli.jar -s 0.0.0.0:8080/jenkins help
+#   changed_when: false
+#   register: __jenkins_cli_response
+#
+# - debug: var=__jenkins_cli_response.stdout_lines
