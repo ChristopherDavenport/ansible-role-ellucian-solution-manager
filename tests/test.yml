@@ -14,14 +14,8 @@
     - role_under_test
   post_tasks:
     - name: Wait For Service to Come Online
-      pause:
-        minutes: 2
-    - name: Output Tomcat Log File
-      command: cat {{ tomcat_catalina_home }}/logs/catalina.out
-      register: __ellucian_solution_manager_catalina_out
-      changed_when: False
-    - name: Debug Log File
-      debug: var=__ellucian_solution_manager_catalina_out.stdout_lines
+      wait_for:
+        path: /var/lib/jenkins/secrets/initialAdminPassword
     - name: Check Manager Application
       uri:
         url: http://0.0.0.0:8080/manager
@@ -44,6 +38,12 @@
         follow_redirects: all
         user: admin
         password: "{{ __jenkins_defaultPassword.stdout }}"
+    - name: Output Tomcat Log File
+      command: cat {{ tomcat_catalina_home }}/logs/catalina.out
+      register: __ellucian_solution_manager_catalina_out
+      changed_when: False
+    - name: Debug Log File
+      debug: var=__ellucian_solution_manager_catalina_out.stdout_lines
     - name: Find Jenkins CLI
       command: find / -name "jenkins-cli.jar"
       register: __jenkins_cli_jar
