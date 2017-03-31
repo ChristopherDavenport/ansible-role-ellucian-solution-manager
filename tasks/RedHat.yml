@@ -86,7 +86,7 @@
 - name: Create Configuration Database Encryption Key
   become: yes
   become_user: "{{ esm_user }}"
-  shell: java -classpath "{{ esm_deploy_directory }}/admin_utils.jar:{{ esm_deploy_directory }}/commons-codec-1.5.jar" adminutils.codec.AdminCodecUtils {{ esm_database_file_password }} {{ esm_database_user_password }} {{ esm_database_user_name }} {{ esm_data_directory }}
+  command: java -classpath "{{ esm_deploy_directory }}/adminutils.jar:{{ esm_deploy_directory }}/commons-codec-1.5.jar" adminutils.codec.AdminCodecUtils {{ esm_database_file_password }} {{ esm_database_user_password }} {{ esm_database_user_name }} {{ esm_data_directory }}
   args:
     chdir: "{{ esm_deploy_directory }}"
     creates: "{{ esm_grails_directory }}/admin-config.properties"
