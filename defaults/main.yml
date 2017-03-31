@@ -1,1 +1,6 @@
 ---
+
+esm_user: esmadmin
+esm_group: "{{ esm_user }}"
+
+esm_hostname: "{{ ansible_default_ipv4.address }}"

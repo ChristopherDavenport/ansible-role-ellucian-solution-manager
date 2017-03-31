@@ -15,6 +15,11 @@
     enabled: yes
   notify: Restart Tomcat
 
-
-
--
+- name: Deploy Jenkins To Tomcat Server
+  copy:
+    remote_src: yes
+    dest: "{{ tomcat_catalina_home }}/webapps/jenkins.war"
+    src: "/usr/lib/jenkins/jenkins.war"
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+  notify: Restart Tomcat

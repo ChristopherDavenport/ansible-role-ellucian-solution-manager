@@ -1,7 +1,7 @@
 ---
 
-- name: Include Steps For Installation
-  include: "{{ os_item }}"
+- name: Include Steps For ESM Installation
+  include: "{{ ellucian_solution_manager_os_tasks }}"
   static: no
   with_first_found:
     - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
@@ -10,4 +10,4 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
   loop_control:
-    loop_var: os_item
+    loop_var: ellucian_solution_manager_os_tasks
