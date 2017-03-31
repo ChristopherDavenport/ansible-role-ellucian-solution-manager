@@ -129,9 +129,9 @@
   register: __jenkins_defaultPassword
   changed_when: false
 
-- name: Utilize Jenkins CLI
-  command: java -jar {{ tomcat_catalina_home }}/webapps/jenkins/WEB-INF/jenkins-cli.jar -s 0.0.0.0:8080/jenkins help
-  changed_when: false
-  register: __jenkins_cli_response
-
-- debug: var=__jenkins_cli_response.stdout_lines
+# - name: Utilize Jenkins CLI
+#   command: java -jar {{ tomcat_catalina_home }}/webapps/jenkins/WEB-INF/jenkins-cli.jar -s 0.0.0.0:8080/jenkins help
+#   changed_when: false
+#   register: __jenkins_cli_response
+#
+# - debug: var=__jenkins_cli_response.stdout_lines
