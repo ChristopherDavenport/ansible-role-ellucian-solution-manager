@@ -68,6 +68,7 @@
     group: "{{ esm_group }}"
     mode: 0600
     src: config.properties.j2
+  notify: Restart Tomcat
 
 - name: Apply Admin App Prod Code Map
   template:
@@ -76,6 +77,7 @@
     group: "{{ esm_group }}"
     mode: 0600
     src: ProdCodeMap.txt.j2
+  notify: Restart Tomcat
 
 
 ###############################################################################
@@ -136,9 +138,14 @@
   register: __jenkins_defaultPassword
   changed_when: false
 
-# - name: Utilize Jenkins CLI
-#   command: java -jar {{ tomcat_catalina_home }}/webapps/jenkins/WEB-INF/jenkins-cli.jar -s 0.0.0.0:8080/jenkins help
-#   changed_when: false
-#   register: __jenkins_cli_response
-#
-# - debug: var=__jenkins_cli_response.stdout_lines
+- debug:
+    msg: |
+      Initial Jenkins Admin Password is {{ __jenkins_defaultPassword.stdout }}
+
+- debug:
+    msg: "Caution - esm_jenkins_user_name is not set full functionality not available"
+  when: esm_jenkins_user_name == ""
+
+- debug:
+    msg: "Caution - esm_jenkins_api_token is not set full functionality not available"
+  when: esm_jenkins_api_token == ""
