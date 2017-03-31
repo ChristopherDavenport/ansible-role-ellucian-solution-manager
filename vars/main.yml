@@ -7,7 +7,10 @@ jenkins_user: "{{ esm_user }}"
 tomcat_user_name: "{{ esm_user }}"
 tomcat_user_group: "{{ esm_group }}"
 
-tomcat_catalina_opts: "-DJENKINS_HOME={{ jenkins_home }}"
+tomcat_catalina_opts: >-
+  -DJENKINS_HOME={{ jenkins_home }}
+  -DJAVA_HOME={{ java_home }}
+  -DGROOVY_HOME={{ groovy_home }}
 tomcat_java_opts: >-
   -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1536m -Xmx1536m
   -XX:NewSize=512m -XX:MaxNewSize=512m -XX:+DisableExplicitGC
