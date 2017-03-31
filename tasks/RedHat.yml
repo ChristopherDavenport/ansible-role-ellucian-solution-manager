@@ -13,8 +13,13 @@
 - name: Enable RNGD
   service:
     name: rngd
-    state: started
     enabled: yes
+  notify: Restart Tomcat
+
+- name: Start RNGD
+  service:
+    name: rngd
+    state: started
   notify: Restart Tomcat
 
 ###############################################################################
