@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
   vars:
+    esm_remove_manager_app: no
     tomcat_users:
       - name: "{{ esm_user }}"
         password: "{{ esm_user }}"
