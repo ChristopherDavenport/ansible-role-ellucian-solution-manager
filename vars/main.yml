@@ -10,4 +10,4 @@ tomcat_user_group: "{{ esm_group }}"
 tomcat_catalina_opts: "-DJENKINS_HOME={{ jenkins_home }}"
 tomcat_java_opts: >-
   -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1536m -Xmx1536m
-  -XX:NewSize=512m -XX:MaxNewSize=512m -XX:+DisableExplicitG
+  -XX:NewSize=512m -XX:MaxNewSize=512m -XX:+DisableExplicitGC
