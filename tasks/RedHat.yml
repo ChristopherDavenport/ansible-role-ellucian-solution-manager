@@ -1,0 +1,20 @@
+---
+
+- name: Install Additional Packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - rng-tools
+  notify: Restart Tomcat
+
+- name: Enable RNGD
+  service:
+    name: rngd
+    state: started
+    enabled: yes
+  notify: Restart Tomcat
+
+
+
+-
