@@ -1,4 +1,6 @@
 ---
+###############################################################################
+# Initial Setup
 
 - name: Install Additional Packages
   package:
@@ -15,6 +17,85 @@
     enabled: yes
   notify: Restart Tomcat
 
+###############################################################################
+# Create Deploy Directory and Transfer Base Libs
+#
+
+- name: Make ESM Base Directory
+  file:
+    path: "{{ esm_base }}"
+    state: directory
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+
+- name: Make ESM Deploy Directory
+  file:
+    path: "{{ esm_deploy_directory }}"
+    state: directory
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+
+- name: Set esm_deploy_present on absence or presence of esm_deploy_zip variable
+  set_fact:
+    esm_deploy_exists: "{{ esm_deploy_zip is defined and esm_deploy_zip not in (None, '')}}"
+
+- name: Unzip Deploy Libs To Deploy Dir
+  unarchive:
+    src: "{{ esm_deploy_zip }}"
+    dest: "{{ esm_deploy_directory }}"
+  when: esm_deploy_exists
+
+###############################################################################
+# Create the Solution Manager Application Data Directory
+
+- name: Make ESM Data Directory
+  file:
+    path: "{{ esm_data_directory }}"
+    state: directory
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+
+
+- name: Apply Admin App Config
+  template:
+    dest: "{{ esm_data_directory }}/config.properties"
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+    mode: 0600
+    src: config.properties.j2
+
+- name: Apply Admin App Prod Code Map
+  template:
+    dest: "{{ esm_data_directory }}/ProdCodeMap.txt"
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+    mode: 0600
+    src: ProdCodeMap.txt.j2
+
+
+###############################################################################
+# Configure/Install Database Directory
+
+- name: Make ESM User .grails Directory
+  file:
+    path: "{{ esm_grails_directory }}"
+    state: directory
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+
+- name: Create Configuration Database Encryption Key
+  become: yes
+  become_user: "{{ esm_user }}"
+  shell: java -classpath "{{ esm_deploy_directory }}/admin_utils.jar:{{ esm_deploy_directory }}/commons-codec-1.5.jar" {{ esm_database_file_password }} {{ esm_database_user_password }} {{ esm_database_user_name }} {{ esm_data_directory }}
+  args:
+    chdir: "{{ esm_deploy_directory }}"
+    creates: "{{ esm_grails_directory }}/admin-config.properties"
+  when: esm_deploy_exists
+
+
+###############################################################################
+# Handle Tomcat Deployment
+
 - name: Deploy Jenkins To Tomcat Server
   copy:
     remote_src: yes
@@ -22,4 +103,13 @@
     src: "/usr/lib/jenkins/jenkins.war"
     owner: "{{ esm_user }}"
     group: "{{ esm_group }}"
+  notify: Restart Tomcat
+
+- name: Deploy ESM Admin War To Tomcat Server
+  copy:
+    src: "{{ esm_deploy_directory }}/admin.war"
+    dest: "{{ tomcat_catalina_home }}/webapps/admin.war"
+    owner: "{{ esm_user }}"
+    group: "{{ esm_group }}"
+  when: esm_deploy_exists
   notify: Restart Tomcat
