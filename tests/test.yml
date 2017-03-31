@@ -2,8 +2,8 @@
 - hosts: localhost
   vars:
     tomcat_users:
-      - name: "{{ test_user }}"
-        password: "{{ test_user }}"
+      - name: "{{ esm_user }}"
+        password: "{{ esm_user }}"
         roles: "manager-gui,admin-gui"
   pre_tasks:
     - name: Update apt cache.
@@ -27,8 +27,8 @@
         url: http://0.0.0.0:8080/manager
         return_content: yes
         follow_redirects: all
-        user: "{{ test_user }}"
-        password: "{{ test_user }}"
+        user: "{{ esm_user }}"
+        password: "{{ esm_user }}"
     - name: Get Default Password
       command: cat /var/lib/jenkins/secrets/initialAdminPassword
       register: __jenkins_defaultPassword
