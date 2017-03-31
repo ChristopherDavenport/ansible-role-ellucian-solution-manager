@@ -107,6 +107,7 @@
 
 - name: Deploy ESM Admin War To Tomcat Server
   copy:
+    remote_src: yes
     src: "{{ esm_deploy_directory }}/admin.war"
     dest: "{{ tomcat_catalina_home }}/webapps/admin.war"
     owner: "{{ esm_user }}"
