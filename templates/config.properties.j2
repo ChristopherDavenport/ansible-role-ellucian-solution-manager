@@ -1,6 +1,6 @@
 jenkinsUrl=http://{{ esm_hostname }}:8080/jenkins
-jenkinsUsername=
-jenkinsToken=
+jenkinsUsername={{ esm_jenkins_user_name }}
+jenkinsToken={{ esm_jenkins_api_token }}
 dhcpConfigOutputFile=/etc/dhcp/dhcpd.conf
 pxeBootOutputDir=/u01/tftp/pxelinux.cfg
 kickstartOutputDir=/u01/ks/ksCmds
