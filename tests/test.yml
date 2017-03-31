@@ -44,3 +44,8 @@
         follow_redirects: all
         user: admin
         password: "{{ __jenkins_defaultPassword.stdout }}"
+    - name: Find Jenkins CLI
+      command: find / -name "jenkins-cli.jar"
+      register: __jenkins_cli_jar
+      changed_when: False
+    - debug: var=__jenkins_cli_jar.stdout_lines
