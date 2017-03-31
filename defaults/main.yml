@@ -2,6 +2,8 @@
 
 esm_hostname: "{{ ansible_default_ipv4.address }}"
 
+esm_remove_manager_app: yes
+
 esm_user: esmadmin
 esm_group: "{{ esm_user }}"
 

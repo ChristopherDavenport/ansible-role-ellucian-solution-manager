@@ -2,6 +2,22 @@
 ###############################################################################
 # Initial Setup
 
+- name: Remove Webapps
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ tomcat_catalina_home }}/webapps/docs"
+    - "{{ tomcat_catalina_home }}/webapps/examples"
+    - "{{ tomcat_catalina_home }}/webapps/host-manager"
+    - "{{ tomcat_catalina_home }}/webapps/ROOT"
+
+- name: Remove Manager Webapp
+  file:
+    path: "{{ tomcat_catalina_home }}/webapps/manager"
+    state: absent
+  when: esm_remove_manager_app
+
 - name: Install Additional Packages
   package:
     name: "{{ item }}"
