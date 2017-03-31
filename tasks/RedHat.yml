@@ -123,6 +123,7 @@
 - name: Wait For Jenkins Configuration to Complete
   wait_for:
     path: "{{ jenkins_initialAdminPassword_location }}"
+    timeout: 60
 
 - name: Capture Jenkins Initial Admin Password
   command: cat {{ jenkins_initialAdminPassword_location }}
