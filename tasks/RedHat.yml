@@ -15,6 +15,10 @@
     enabled: yes
   notify: Restart Tomcat
 
-
-
--
+- name: Deploy Jenkins To Tomcat Server
+  copy:
+    remote_src: yes
+    dest:
+    src: {{ jenkins }}
+    owner: 
+    group:
