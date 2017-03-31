@@ -1,6 +1,20 @@
 ---
 
+esm_hostname: "{{ ansible_default_ipv4.address }}"
+
 esm_user: esmadmin
 esm_group: "{{ esm_user }}"
 
-esm_hostname: "{{ ansible_default_ipv4.address }}"
+esm_base: /opt/ellucian_solution_manager
+
+esm_deploy_directory: "{{ esm_base }}/esmdeploy"
+# esm_deploy_zip:
+
+esm_user_home: /home/{{ esm_user }}
+esm_grails_directory: "{{ esm_user_home }}/.grails"
+
+esm_database_user_name: esmadmin
+esm_database_file_password: u_pick_it
+esm_database_user_password:  u_pick_it
+
+esm_data_directory: "{{ esm_base }}/adminApp"

@@ -1,0 +1,12 @@
+jenkinsUrl=http://{{ esm_hostname }}:8080/jenkins
+jenkinsUsername=
+jenkinsToken=
+dhcpConfigOutputFile=/etc/dhcp/dhcpd.conf
+pxeBootOutputDir=/u01/tftp/pxelinux.cfg
+kickstartOutputDir=/u01/ks/ksCmds
+installersDir=/cdcache
+restartDHCPOnChange=true
+autoStartJenkinsJobs=true
+downloadRootUrl=https://esmsvc.ellucian.com:8443
+groovyLocalRuntimePath={{ groovy_home }}/bin/groovy
+contentDir="{{ esm_base }}"
